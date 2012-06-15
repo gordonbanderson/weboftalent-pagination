@@ -1,5 +1,5 @@
-Pagination of Folders
-=====================
+Pagination of Children Within Folders
+=====================================
 
 Introduction
 ------------
@@ -21,7 +21,7 @@ For example, the following will show 8 NewsItem objects per rendered page.
 Render the list of items as you see fit for your website using normal templating code.
 
 
-### Pagination
-Simply add this line to include pagination
+### Pagination Links
+Simply add this line to include pagination links (1,2,3... etc) in your template
 
     <% include Pagination %>
