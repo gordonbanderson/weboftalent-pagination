@@ -2,55 +2,50 @@
 
 class Paginator_Controller_Extension extends Extension {
 
-	function PagedChildren($klazz, $childrenPerPage = 10) {
-    //error_log("+++++++++++++++++++++");
-    //error_log("N children:".$childrenPerPage);
+  /*
+  Call this from a template to iterate through a number of items (default 10) for the
+  currently selected page.  The result is saved as a variable called $this->lastPagedResults for
+  caching purposes when it comes to rendering the pagination
 
+  <code>
+  <% control PagedChildren(NewsItem,8) %>
+    <li>
+    <a href="$Link">$Title</a>
+    <br/>
+    <a href="$Link">$NewsItemImage.SetWidth(200)</a>
+    <br/>
+    <a href="$Link">$NewsItemDate.Nice</a>
+
+    </li>
+    <% end_control %>
+  </code>
+  */
+	function PagedChildren($klazz, $childrenPerPage = 10) {
+ 
     $pageLength = $childrenPerPage;
     $parentID = $this->owner->ID;
 
-
-  /*
-    if ($this->ClassName == 'NewsItemsFolder') {
-      if ($this->ItemsPerPage) {
-        $pageLength = $this->ItemsPerPage;
-        //error_log("Items per page:".$childrenPerPage);
-      }
-    }
-*/
     $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-
-    $sort = '';
-    if ($klazz === 'NewsItem') {
-      $sort = 'NewsItemDate DESC';
-    }
-
-
     $total = DB::query("SELECT COUNT(*) FROM SiteTree where ParentID=".$parentID)->value();
     $NumberPages = 1 + ($total / $pageLength);
 
-    error_log("KLAZZ:".$klazz);
-    error_log("SORT:".$sort);
-
-     $results= DataObject::get($klazz, 
+    $results= DataObject::get($klazz, 
       "ParentID=".$parentID,//filter
-      $sort,//sort
+      '',//$sort,//sort
       //'',
       '',
       $start.','.$pageLength//limit
       );
 
       $this->lastPagedResults = $results;
-
-     // error_log(print_r($results,1));
-
       return $results;
   }
 
 
+  /*
+    A cached copy of the pagination results
+  */
   function LastPagedResults() {
-    error_log("Getting last page of results");
-    error_log(count($this->lastPagedResults));
     return $this->lastPagedResults;
   }
 
