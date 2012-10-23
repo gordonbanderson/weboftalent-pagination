@@ -58,7 +58,7 @@ class Paginator_Controller_Extension extends Extension {
   }
 
 
-  function PagedDataObjectsByClassName( $klazz, $childrenPerPage = 10 ) {
+  function PagedDataObjectsByClassName( $klazz, $childrenPerPage = 10, $sort = 'ASC' ) {
 
     $pageLength = $childrenPerPage;
 
@@ -77,7 +77,7 @@ class Paginator_Controller_Extension extends Extension {
 
     $results= DataObject::get( $klazz,
       '', //filter
-      '', //$sort,//sort
+      'LastEdited '.$sort, //$sort,//sort
       //'',
       '',
       $start+$offset.','.$pageLength//limit
