@@ -20,83 +20,22 @@ class Paginator_Controller_Extension extends Extension {
     <% end_control %>
   </code>
   */
-  function PagedChildren( $klazz, $childrenPerPage = 10 ) {
-
-    $pageLength = $childrenPerPage;
-
+  function PagedChildren( $klazz, $pageLength = 10 ) {
     $parentID = $this->owner->ID;
-    $offset = 0;
-    if ( isset( $this->PagedOffset ) ) {
-      $offset = $this->PagedOffset;
-    }
-
-    $start = isset( $_GET['start'] ) ? (int)( Convert::raw2sql( $_GET['start'] ) ) : 0;
-    $total = DB::query( "SELECT COUNT(*) FROM SiteTree where ParentID=".$parentID )->value();
-    $total = $total - $offset;
-    $NumberPages = 1 + ( $total / $pageLength );
-
-    $this->PageNumber = 1+$start/$pageLength;
-
-    $results= DataObject::get( $klazz,
-      "ParentID=".$parentID, //filter
-      '', //$sort,//sort
-      //'',
-      '',
-      $start+$offset.','.$pageLength//limit
-    );
-
-    $results->pageStart = $results->pageStart-$offset;
-
-    $ctr = $start+1;
-    foreach ( $results as $result ) {
-      $result->IteratorPosition = $ctr;
-      $ctr = $ctr + 1;
-    }
-
-    $this->lastPagedResults = $results;
-    return $results;
+    $req = Controller::curr()->getRequest();
+    $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->where('"ParentID" = '.$parentID), $req);
+    $this->lastPagedResults->setPageLength($pageLength);
+    $this->lastPagedResults->setLimitItems($pageLength);
+    return $this->lastPagedResults;
   }
 
 
-  function PagedDataObjectsByClassName( $klazz, $childrenPerPage = 10, $sort = 'ASC' ) {
-
-    $pageLength = $childrenPerPage;
-
-    $parentID = $this->owner->ID;
-    $offset = 0;
-    if ( isset( $this->PagedOffset ) ) {
-      $offset = $this->PagedOffset;
-    }
-
-    $start = isset( $_GET['start'] ) ? (int)( Convert::raw2sql( $_GET['start'] ) ) : 0;
-    $total = DB::query( "SELECT COUNT(*) FROM SiteTree where ClassName='$klazz'" )->value();
-    $total = $total - $offset;
-    $NumberPages = 1 + ( $total / $pageLength );
-
-    $this->PageNumber = 1+$start/$pageLength;
-
-    $results= DataObject::get( $klazz,
-      '', //filter
-      'LastEdited '.$sort, //$sort,//sort
-      //'',
-      '',
-      $start+$offset.','.$pageLength//limit
-    );
-
-    if ( $results ) {
-      $results->pageStart = $results->pageStart-$offset;
-
-      $ctr = $start+1;
-      foreach ( $results as $result ) {
-        $result->IteratorPosition = $ctr;
-        $ctr = $ctr + 1;
-      }
-    }
-
-
-
-    $this->lastPagedResults = $results;
-    return $results;
+  function PagedDataObjectsByClassName( $klazz, $pageLength = 10, $sort = 'ASC' ) {
+    $req = Controller::curr()->getRequest();
+    $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->sort('LastEdited '.$sort), $req);
+    $this->lastPagedResults->setPageLength($pageLength);
+    $this->lastPagedResults->setLimitItems($pageLength);
+    return $this->lastPagedResults;
   }
 
 
@@ -124,6 +63,7 @@ class Paginator_Controller_Extension extends Extension {
     A cached copy of the pagination results
   */
   function LastPagedResults() {
+    error_log("LAST PAGED RESULTS:".$this->lastPagedResults);
     return $this->lastPagedResults;
   }
 
