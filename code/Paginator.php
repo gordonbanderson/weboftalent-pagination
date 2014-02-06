@@ -20,17 +20,22 @@ class Paginator_Controller_Extension extends Extension {
     <% end_control %>
   </code>
   */
-  function PagedChildren( $klazz, $pageLength = 10 ) {
+  function PagedChildren( $klazz, $pageLength = 10, $prime = false ) {
     $parentID = $this->owner->ID;
     $req = Controller::curr()->getRequest();
     $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->where('"ParentID" = '.$parentID), $req);
     $this->lastPagedResults->setPageLength($pageLength);
     $this->lastPagedResults->setLimitItems($pageLength);
-    return $this->lastPagedResults;
+    $result = $this->lastPagedResults;
+    if ($prime == true) {
+      $result = ''; // render nothing to the template, we are only updating variables
+    }
+
+    return $result;
   }
 
 
-  function PagedDataObjectsByClassName( $klazz, $pageLength = 10, $sort = 'ASC' ) {
+  function PagedDataObjectsByClassName( $klazz, $pageLength = 10, $sort = 'ASC') {
     $req = Controller::curr()->getRequest();
     $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->sort('LastEdited '.$sort), $req);
     $this->lastPagedResults->setPageLength($pageLength);
@@ -63,7 +68,6 @@ class Paginator_Controller_Extension extends Extension {
     A cached copy of the pagination results
   */
   function LastPagedResults() {
-    error_log("LAST PAGED RESULTS:".$this->lastPagedResults);
     return $this->lastPagedResults;
   }
 
