@@ -2,6 +2,7 @@
 	"name": "weboftalent/pagination",
 	"description": "Pagination helper for SilverStripe",
 	"keywords": ["silverstripe", "pagination","weboftalent"],
+	"type": "silverstripe-module",
 	"authors": [
 	{
 		"name": "Gordon Anderson",
