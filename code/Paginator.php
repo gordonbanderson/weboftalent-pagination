@@ -20,10 +20,10 @@ class Paginator_Controller_Extension extends Extension {
     <% end_control %>
   </code>
   */
-  function PagedChildren( $klazz, $pageLength = 10, $prime = false ) {
+  function PagedChildren( $klazz, $pageLength = 10, $prime = false, $relationship_key = "ParentID" ) {
     $parentID = $this->owner->ID;
     $req = Controller::curr()->getRequest();
-    $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->where('"ParentID" = '.$parentID), $req);
+    $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->where('"'.$relationship_key.'" = '.$parentID), $req);
     $this->lastPagedResults->setPageLength($pageLength);
     $this->lastPagedResults->setLimitItems($pageLength);
     $result = $this->lastPagedResults;
