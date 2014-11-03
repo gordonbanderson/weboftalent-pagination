@@ -23,14 +23,14 @@ class Paginator_Controller_Extension extends Extension {
   function PagedChildren( $klazz, $pageLength = 10, $prime = false ) {
     $parentID = $this->owner->ID;
     $req = Controller::curr()->getRequest();
-    $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->where('"ParentID" = '.$parentID), $req);
+    $list = DataList::create($klazz)->where('"ParentID" = '.$parentID);
+    $this->lastPagedResults = new PaginatedList($list, $req);
     $this->lastPagedResults->setPageLength($pageLength);
     $this->lastPagedResults->setLimitItems($pageLength);
     $result = $this->lastPagedResults;
     if ($prime == true) {
       $result = ''; // render nothing to the template, we are only updating variables
     }
-
     return $result;
   }
 
@@ -72,4 +72,3 @@ class Paginator_Controller_Extension extends Extension {
   }
 
 }
-?>
