@@ -72,4 +72,3 @@ class Paginator_Controller_Extension extends Extension {
   }
 
 }
-?>
