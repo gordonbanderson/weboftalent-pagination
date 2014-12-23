@@ -35,6 +35,21 @@ class Paginator_Controller_Extension extends Extension {
   }
 
 
+    function AllPagedChildren( $pageLength = 10, $sort='Sort', $prime = false, $relationship_key = "ParentID" ) {
+      $parentID = $this->owner->ID;
+      $req = Controller::curr()->getRequest();
+      $list = SiteTree::get()->where('"ParentID" = '.$parentID);
+      $this->lastPagedResults = new PaginatedList($list, $req);
+      $this->lastPagedResults->setPageLength($pageLength);
+      $this->lastPagedResults->setLimitItems($pageLength);
+      $result = $this->lastPagedResults;
+      if ($prime == true) {
+        $result = ''; // render nothing to the template, we are only updating variables
+      }
+      return $result;
+    }
+
+
   function PagedDataObjectsByClassName( $klazz, $pageLength = 10, $sort = 'ASC') {
     $req = Controller::curr()->getRequest();
     $this->lastPagedResults = new PaginatedList(DataList::create($klazz)->sort('LastEdited '.$sort), $req);
