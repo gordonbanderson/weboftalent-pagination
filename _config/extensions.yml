@@ -1,0 +1,7 @@
+---
+name: web-of-talent-child-paginator
+After: 'framework/*','cms/*'
+---
+Page_Controller:
+  extensions:
+     ['ChildPaginatorControllerExtension']
