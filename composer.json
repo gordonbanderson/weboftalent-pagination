@@ -1,16 +1,20 @@
 {
-	"name": "weboftalent/pagination",
-	"description": "Pagination helper for SilverStripe",
-	"keywords": ["silverstripe", "pagination","weboftalent"],
-	"type": "silverstripe-module",
-	"authors": [
-	{
-		"name": "Gordon Anderson",
-		"email": "gordon@weboftalent.asia"
-	}
-	],
-	"require":
-	{
-		"silverstripe/framework": "3.*"
-	}
+  "name": "weboftalent/pagination",
+  "description": "Pagination helper for SilverStripe",
+  "keywords": [
+    "silverstripe",
+    "pagination",
+    "weboftalent"
+  ],
+  "type": "silverstripe-module",
+  "authors": [
+    {
+      "name": "Gordon Anderson",
+      "email": "gordon@weboftalent.asia"
+    }
+  ],
+  "require": {
+    "silverstripe/framework": "3.*"
+  },
+  "license": "BSD-3-Clause"
 }
